@@ -6,7 +6,7 @@ import Sorting from "@/components/sorting/sorting";
 import VehicleCard from "@/components/vehicle-card/vehicle-card";
 import Pagination from "@/components/pagination/pagination";
 
-export default function Page() {
+const Page = () => {
     return (
       <div>
         <CreateVehicleButton />
@@ -21,3 +21,5 @@ export default function Page() {
       </div>
     );
   }
+
+  export default Page; 

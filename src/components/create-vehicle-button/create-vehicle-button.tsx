@@ -2,10 +2,14 @@
  
 import { useRouter } from 'next/navigation';
 
-export default function CreateVehicleButton() {
+const CreateVehicleButton = () => {
     const router = useRouter();
 
     return ( 
-        <button onClick={() => router.push('/create-vehicle')}>Create Vehicle</button>
+        <div className='relative'>
+            <button onClick={() => router.push('/create-vehicle')}>Create Vehicle</button>
+        </div>
     );
 };
+
+export default CreateVehicleButton; 

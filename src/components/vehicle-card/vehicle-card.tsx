@@ -1,7 +1,9 @@
-export default function VehicleCard() {
+const VehicleCard = () => {
     return (
-        <div>
+        <div className="">
             Card
         </div>
     );
 };
+
+export default VehicleCard; 

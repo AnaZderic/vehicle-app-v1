@@ -1,4 +1,4 @@
-export default function Pagination() {
+const Pagination = () => {
     return (
         <div>
             <button>left</button>
@@ -7,3 +7,5 @@ export default function Pagination() {
         </div>
     );
 };
+
+export default Pagination; 

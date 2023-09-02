@@ -1,5 +1,7 @@
-export default function Filtering() {
+const Filtering = () => {
     return (
         <input type="text" />
     );
 };
+
+export default Filtering; 
