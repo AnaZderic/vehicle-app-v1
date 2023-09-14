@@ -6,7 +6,7 @@ import MakeRepository from "@/Repository/MakeRepository";
 
 const CreateVehicle = async () => {
     let makeRepository: MakeRepository = new MakeRepository();
-    let makes: MakeModel[] =  await makeRepository.getMakes();
+    let makes = (await makeRepository.readMakes()).result as MakeModel[];
     
     return (
         <div className="h-full px-6 py-12 lg:flex lg:justify-center">

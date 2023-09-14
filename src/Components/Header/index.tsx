@@ -11,7 +11,6 @@ const Header = () => {
             <AppLogo />
             <span>
                 <SearchBar />
-                <SubmitButton text="Search" />
             </span>
         </header>
        </div>

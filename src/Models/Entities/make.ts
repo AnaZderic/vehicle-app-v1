@@ -5,8 +5,7 @@ class MakeModel
     abrv: string;
     img: string;
 
-    constructor(name: string, abrv: string, img: string, id?: string)
-    {
+    constructor(name: string, abrv: string, img: string, id?: string) {
         this.id = id;
         this.name = name;
         this.abrv = abrv;

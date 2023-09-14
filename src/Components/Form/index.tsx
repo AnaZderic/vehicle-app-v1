@@ -25,7 +25,7 @@ export const Form = () => {
         }
         try {
             let makeModel: MakeModel = new MakeModel(name, abrv, img);
-            makeRepository.addMake(makeModel);
+            makeRepository.createMake(makeModel);
             router.push("/");
         } catch(error) {
             console.log(error);
