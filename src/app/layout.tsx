@@ -1,4 +1,6 @@
-import Header from "@/components/header/header";
+'use client';
+
+import Header from '@/Components/Header';
 import './globals.css';
 
 export default function RootLayout({
@@ -10,7 +12,9 @@ export default function RootLayout({
       <html lang="en">
         <body>
           <Header />
-          {children}
+          <div className='mt-8'>
+            {children}
+          </div>
         </body>
       </html>
     )
