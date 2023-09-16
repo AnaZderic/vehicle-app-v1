@@ -3,7 +3,3 @@ interface IPartialMake {
     abrv: string;
     img: string;
 }
-
-interface IPartialModel extends IPartialMake {
-    makeId: string;
-}

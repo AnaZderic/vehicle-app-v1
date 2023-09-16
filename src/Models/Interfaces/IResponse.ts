@@ -3,5 +3,3 @@ interface IResponse<T = {}> {
     errors?: string[];
     success: boolean;
 }
-
-

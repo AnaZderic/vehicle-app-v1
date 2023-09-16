@@ -1,6 +1,8 @@
 import { doc, addDoc, getDoc, getDocs, updateDoc, deleteDoc, query, orderBy, startAt, limit, QueryConstraint, startAfter } from "firebase/firestore";
+import { StorageReference, uploadBytes, getDownloadURL } from "firebase/storage";
 import BaseRepository from "./BaseRepository";
 import MakeModel from "@/Models/Entities/make";
+
 
 class MakeRepository extends BaseRepository {
     
@@ -8,19 +10,40 @@ class MakeRepository extends BaseRepository {
         super("makes");
     }
     
-    public createMake = async (partialMake: IPartialMake): Promise<IResponse> => {
+    public createMake = async (partialMakeFile: IPartialMakeFile): Promise<IResponse> => {
         try {
-            addDoc(this.collectionRef, partialMake);
-            const response = {
-                success: true
+            let storageRef: StorageReference;
+            let potentialStorageRef = await this.getStorageRef(partialMakeFile.img);
+            
+            if (potentialStorageRef.success) {
+                storageRef = potentialStorageRef.result as StorageReference;
+                const newMetadata = {
+                    contentType: `image/${storageRef.name.split(".")[1]}`
+                }; 
+                await uploadBytes(storageRef, partialMakeFile.file, newMetadata);
+
+                let partialMake: IPartialMake = {
+                    name: partialMakeFile.name,
+                    abrv: partialMakeFile.abrv,
+                    img: partialMakeFile.img
+                };
+                
+                let downloadURL = await getDownloadURL(storageRef);
+                partialMake.img = downloadURL;
+
+                await addDoc(this.collectionRef, partialMake);
+                const response = {
+                    success: true
+                };
+                return response;
             }
-            return response;
+            else throw "Unknown error.";
         } catch(err) {
             console.log(err);
             const response = {
                 errors: ["Unknown error."],
                 success: false
-            }
+            };
             return response;
         }
     }
@@ -36,14 +59,14 @@ class MakeRepository extends BaseRepository {
                 {
                     result: makeModel,
                     success: true
-                }
+                };
                 return response;
             } else {
                 console.log("No such document!");
                 const response: IResponse = {
                     errors: ["No such document!"],
                     success: true
-                }
+                };
                 return response;
             }
             
@@ -52,7 +75,7 @@ class MakeRepository extends BaseRepository {
             const response: IResponse = {
                 errors: ["Unknown error."],
                 success: true
-            }
+            };
             return response;
         }
     }
@@ -72,14 +95,14 @@ class MakeRepository extends BaseRepository {
             const response: IResponse<MakeModel[]> = {
                 result: makes,
                 success: true
-            }
+            };
             return response;
         } catch (err) {
             console.log(err);
             const response: IResponse = {
                 errors: ["Unknown error."],
                 success: false
-            }
+            };
             return response;
         }
     }
@@ -109,14 +132,14 @@ class MakeRepository extends BaseRepository {
             await updateDoc(docRef, {updatedMake});
             const response: IResponse = {
                 success: true
-            }
+            };
             return response; 
         } catch(err) {
             console.log(err);
             const response: IResponse = {
                 errors: ["Unknown error."],
                 success: false
-            }
+            };
             return response;
         }
     }
@@ -127,18 +150,17 @@ class MakeRepository extends BaseRepository {
             await deleteDoc(docRef);
             const response: IResponse = {
                 success: true
-            }
+            };
             return response;
         } catch(err) {
             console.log(err);
             const response: IResponse = {
                 errors: ["Unknown error."],
                 success: false
-            }
+            };
             return response;
         }
     }
-
 
 }
 

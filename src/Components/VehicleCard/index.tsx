@@ -9,7 +9,7 @@ const VehicleCard = (props: MakeModel) => {
     const router = useRouter();
     
     return (
-        <span className="p-2" onClick={() => {router.push(`/CreateModel/${id}`)}}>
+        <span className="p-4" onClick={() => {router.push(`/CreateModel/${id}`)}}>
             {img && <Image src={img} width={200} height={200} alt="" />} 
             <h1>Vehicle Make: </h1>
             <p>{name}</p>

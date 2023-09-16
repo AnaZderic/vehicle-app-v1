@@ -4,6 +4,7 @@ import {
   addDoc, deleteDoc, doc,
   query, where, onSnapshot 
 } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
 
 // Web app's Firebase configuration
 const firebaseConfig = {
@@ -19,6 +20,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 const getFirestoreInstance = () => getFirestore(app); 
+const getStorageInstance = () => getStorage(app);
 
 // Initialize services
 const db = getFirestore(app);
@@ -83,4 +85,4 @@ const getQueryDoc = () => {
 });
 };
 
-export {db, deleteMake, getQueryDoc, getFirestoreInstance};
+export {db, deleteMake, getQueryDoc, getFirestoreInstance, getStorageInstance};

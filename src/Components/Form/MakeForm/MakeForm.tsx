@@ -23,36 +23,16 @@ export const MakeForm = ({text, customText} : {text: string, customText: string}
             return;
         }
         
-        let imgPath = `/public/images/Makes/${name}/${uuidv4()}.${file.name.split(".")[1]}`;
+        let img = `/images/Makes/${name}/${uuidv4()}.${file.name.split(".")[1]}`;
 
-        try {            
-            const data = new FormData();
-            data.set("file", file);
-            data.set("img", imgPath);
-      
-            const res = await fetch("/Api/Upload", {
-              method: "POST",
-              body: data
-            });
-            // handle the error
-            if (res.ok) {
-                try {
-                    const img = imgPath.replace("/public", "");
-                    console.log(imgPath);
-                    
-                    let partialMake: IPartialMake = {name, abrv, img};
-                    await makeRepository.createMake(partialMake);
-                    router.push("/");
-                } catch(error) {
-                    console.log(error);
-                }
-            } else {
-                throw new Error(await res.text());
-            }
-        } catch (err) {
-            console.error(err);
+        try {
+            let partialMake: IPartialMakeFile = {name, abrv, img, file};
+            await makeRepository.createMake(partialMake);
+            router.push("/");
+        } catch(error) {
+            console.log(error);
         }
-    };
+    }
 
     return (
         <form onSubmit={handleSubmit} className="max-w-md mx-auto">            
