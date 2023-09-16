@@ -1,5 +1,4 @@
-class MakeModel
-{
+class MakeModel {
     id?: string;
     name: string;
     abrv: string;

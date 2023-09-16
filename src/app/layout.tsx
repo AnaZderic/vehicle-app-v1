@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import Header from '@/Components/Header';
-import './globals.css';
+import Header from "@/Components/Header";
+import "./globals.css";
 
 export default function RootLayout({
     children,
@@ -12,7 +12,7 @@ export default function RootLayout({
       <html lang="en">
         <body>
           <Header />
-          <div className='mt-8'>
+          <div className="mt-8">
             {children}
           </div>
         </body>

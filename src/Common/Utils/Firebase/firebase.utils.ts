@@ -3,7 +3,7 @@ import {
   getFirestore, collection, getDocs,
   addDoc, deleteDoc, doc,
   query, where, onSnapshot 
-} from 'firebase/firestore';
+} from "firebase/firestore";
 
 // Web app's Firebase configuration
 const firebaseConfig = {

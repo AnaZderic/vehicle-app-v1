@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import SubmitButton from "../Buttons/SubmitButton/SubmitButton";
+import SubmitButton from "@/Components/Buttons/SubmitButton/SubmitButton";
 import { ChangeEvent, FormEvent, useState } from "react";
-import FormInput from "./FormInput/FormInput";
+import FormInput from "../FormInput/FormInput";
 import { useRouter } from "next/navigation";
 import MakeRepository from "@/Repository/MakeRepository";
 import MakeModel from "@/Models/Entities/make";
 
-export const Form = () => {
+export const ModelForm = ({text, customText} : {text: string, customText: string}) => {
     const [name, setName] = useState('');
     const [abrv, setAbrv] = useState('');
     const [img, setImg] = useState('');
@@ -33,21 +33,22 @@ export const Form = () => {
     };
 
     return ( 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+        <form onSubmit={handleSubmit} className="max-w-md mx-auto">
+            <h1>{text}</h1>
            <FormInput 
             onChange={(event : ChangeEvent<HTMLInputElement>) => setName(event.target.value)}
             value={name}
-            label="Name of the make:" 
+            label={"Name of the "  + customText}
             type="text" 
-            className="border border-slate-500 px-8 py-2" 
+            className="w-full px-3 py-2 border border-slate-500 " 
             placeholder="BMW" 
            />
            <FormInput 
             onChange={(event : ChangeEvent<HTMLInputElement>) => setAbrv(event.target.value)}
             value={abrv}
-            label="Abrv of the make:"
+            label={"Abrv of the " + customText}
             type="text"
-            className="border border-slate-500 px-8 py-2"
+            className="w-full px-3 py-2 border border-slate-500"
             placeholder="BMW"
            />
            <FormInput 
@@ -55,7 +56,7 @@ export const Form = () => {
             value={img}
             label="Image URL:" 
             type="text" 
-            className="border border-slate-500 px-8 py-2" 
+            className="w-full px-3 py-2 border border-slate-500" 
             placeholder="" 
            />
             <SubmitButton text="Add Make" />

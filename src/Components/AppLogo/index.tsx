@@ -1,11 +1,12 @@
-'use client'
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 const AppLogo = () => {
     const router = useRouter();
-
+    
     return ( 
             <Link href="/">
             <Image 

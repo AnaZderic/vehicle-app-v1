@@ -1,8 +1,7 @@
-'use client';
+"use client";
 
 import SearchBar from "../SearchBar";
 import AppLogo from "../AppLogo";
-import SubmitButton from "../Buttons/SubmitButton/SubmitButton";
 
 const Header = () => {
     return(

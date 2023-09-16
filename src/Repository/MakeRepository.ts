@@ -1,4 +1,4 @@
-import { doc, addDoc, getDoc, getDocs, updateDoc, deleteDoc } from "firebase/firestore";
+import { doc, addDoc, getDoc, getDocs, updateDoc, deleteDoc, query, orderBy, startAt, limit, QueryConstraint, startAfter } from "firebase/firestore";
 import BaseRepository from "./BaseRepository";
 import MakeModel from "@/Models/Entities/make";
 
@@ -8,21 +8,16 @@ class MakeRepository extends BaseRepository {
         super("makes");
     }
     
-    public createMake = async (makeModel: MakeModel): Promise<IResponse> =>
-    {
-        try
-        {
-            addDoc(this.collectionRef, makeModel);
-            const response =
-            {
+    public createMake = async (partialMake: IPartialMake): Promise<IResponse> => {
+        try {
+            addDoc(this.collectionRef, partialMake);
+            const response = {
                 success: true
             }
             return response;
-        }
-        catch(err) {
+        } catch(err) {
             console.log(err);
-            const response =
-            {
+            const response = {
                 errors: ["Unknown error."],
                 success: false
             }
@@ -30,8 +25,7 @@ class MakeRepository extends BaseRepository {
         }
     }
 
-    public readMake = async (id: string): Promise<IResponse> =>
-    {
+    public readMake = async (id: string): Promise<IResponse> => {
         try {
             let docRef = doc(this.collectionRef, id);
             const snapshot = await getDoc(docRef);
@@ -44,22 +38,18 @@ class MakeRepository extends BaseRepository {
                     success: true
                 }
                 return response;
-            }
-            else {
+            } else {
                 console.log("No such document!");
-                const response: IResponse =
-                {
+                const response: IResponse = {
                     errors: ["No such document!"],
                     success: true
                 }
                 return response;
             }
             
-        }
-        catch(err) {
+        } catch(err) {
             console.log(err);
-            const response: IResponse =
-            {
+            const response: IResponse = {
                 errors: ["Unknown error."],
                 success: true
             }
@@ -67,8 +57,7 @@ class MakeRepository extends BaseRepository {
         }
     }
 
-    public readMakes = async (): Promise<IResponse> =>
-    {   
+    public readMakes = async (): Promise<IResponse> => {   
         try {
             const snapshot = await getDocs(this.collectionRef);
             let makes: MakeModel[] = [];
@@ -80,70 +69,81 @@ class MakeRepository extends BaseRepository {
                 makes.push(makeModel);
             });
 
-            const response: IResponse<MakeModel[]> =
-            {
+            const response: IResponse<MakeModel[]> = {
                 result: makes,
                 success: true
             }
             return response;
-        }
-        catch (err) {
+        } catch (err) {
             console.log(err);
-            const response: IResponse =
-            {
+            const response: IResponse = {
                 errors: ["Unknown error."],
                 success: false
             }
             return response;
         }
     }
+
+    public readMakesPaginated = async (page: number, pageLength?: number): Promise<void> /*Promise<IPaginatedResponse>*/ => {
+        let q;
+        if (this.startAfter) {
+            q = query(this.collectionRef, orderBy("name"), startAfter(this.startAfter), limit(pageLength as number));
+        } else {
+            q = query(this.collectionRef, orderBy("name"), limit(pageLength as number));
+        }
+
+        const documentSnapshots = await getDocs(q);
+
+        this.startAfter = documentSnapshots.docs[documentSnapshots.docs.length-1];
+
+        let collen = await this.collectionLength(); console.log(collen);
+        let pages = await this.pages(8); console.log(pages);
+
+        // return {} as IPaginatedResponse;
+    }
     
-    public updateMake = async (makeModel: MakeModel): Promise<IResponse> =>
-    {
+    public updateMake = async (makeModel: MakeModel): Promise<IResponse> => {
         try {
             const updatedMake: IPartialMake = {...makeModel};
             let docRef = doc(this.collectionRef, makeModel.id);
             await updateDoc(docRef, {updatedMake});
-            const response: IResponse =
-            {
+            const response: IResponse = {
                 success: true
             }
             return response; 
-        }
-        catch(err) {
+        } catch(err) {
             console.log(err);
-            const response: IResponse =
-            {
+            const response: IResponse = {
                 errors: ["Unknown error."],
                 success: false
             }
             return response;
         }
-
     }
 
-    public deleteMake = async (id: string): Promise<IResponse> =>
-    {
+    public deleteMake = async (id: string): Promise<IResponse> => {
         try {
             let docRef = doc(this.collectionRef, id);
             await deleteDoc(docRef);
-            const response: IResponse =
-            {
+            const response: IResponse = {
                 success: true
             }
             return response;
-        }
-        catch(err) {
+        } catch(err) {
             console.log(err);
-            const response: IResponse =
-            {
+            const response: IResponse = {
                 errors: ["Unknown error."],
                 success: false
             }
             return response;
         }
     }
-     
+
+
 }
 
 export default MakeRepository;
+function startBefore(): import("@firebase/firestore").QueryConstraint {
+    throw new Error("Function not implemented.");
+}
+

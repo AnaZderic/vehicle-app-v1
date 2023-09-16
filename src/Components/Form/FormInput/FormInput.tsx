@@ -1,5 +1,3 @@
-'use client';
-
 interface InputProps {
     label: string;
     [x: string]: any;
@@ -7,11 +5,11 @@ interface InputProps {
 
 const FormInput = ({label, ...otherProps}: InputProps) => {
     return (
-       <div>
+       <div className="mb-3">
         {label && (
-          <label>{label}</label>
+          <label className="block mb-1">{label}</label>
         )}
-        <input className="" {... otherProps} />
+        <input {... otherProps} />
 
        </div>
     );
