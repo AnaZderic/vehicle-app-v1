@@ -9,9 +9,9 @@ const Page = () => {
     return (
       <div className="p-6">
         <CreateVehicleButton />
-        <Filtering />
-        <Sorting />
-        <Pagination />
+        {/*<Filtering />*/}
+        {/*<Sorting />*/}
+        {/*<Pagination />*/}
       </div>
     );
   };

@@ -1,4 +1,4 @@
-import { doc, addDoc, getDoc, getDocs, updateDoc, deleteDoc, query, orderBy, startAt, limit, QueryConstraint, startAfter } from "firebase/firestore";
+import { doc, addDoc, getDoc, getDocs, updateDoc, deleteDoc, query, orderBy, startAt, limit, QueryConstraint, startAfter, where } from "firebase/firestore";
 import { StorageReference, uploadBytes, getDownloadURL } from "firebase/storage";
 import BaseRepository from "./BaseRepository";
 import MakeModel from "@/Models/Entities/make";
@@ -73,7 +73,7 @@ class MakeRepository extends BaseRepository {
         } catch(err) {
             console.log(err);
             const response: IResponse = {
-                errors: ["Unknown error."],
+                errors: ["Failed to fetch Make."],
                 success: true
             };
             return response;
@@ -100,7 +100,35 @@ class MakeRepository extends BaseRepository {
         } catch (err) {
             console.log(err);
             const response: IResponse = {
-                errors: ["Unknown error."],
+                errors: ["Failed to fetch Makes."],
+                success: false
+            };
+            return response;
+        }
+    }
+
+    public readMakesFiltered = async (searchTerm: string): Promise<IResponse> => {
+        try {
+            let makes: MakeModel[] = [];
+            const upperCaseSearchTerm = searchTerm
+                .split(' ')
+                .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+                .join(' ');
+            const q = query(this.collectionRef, where('name', '>=', upperCaseSearchTerm), where('name', '<=', upperCaseSearchTerm + '\uf8ff'));
+            const querySnapshot = await getDocs(q);
+            querySnapshot.docs.forEach((doc) => {
+                const ipm: IPartialMake = {...doc.data()} as IPartialMake;
+                let makeModel: MakeModel = new MakeModel(ipm.name, ipm.abrv, ipm.img, doc.id);
+                makes.push(makeModel);
+            });
+            const response: IResponse<MakeModel[]> = {
+                result: makes,
+                success: true
+            };
+            return response;
+        } catch(err) {
+            const response: IResponse = {
+                errors: ["Failed to fetch filtered Makes"],
                 success: false
             };
             return response;
@@ -137,7 +165,7 @@ class MakeRepository extends BaseRepository {
         } catch(err) {
             console.log(err);
             const response: IResponse = {
-                errors: ["Unknown error."],
+                errors: ["Failed to update Make."],
                 success: false
             };
             return response;
@@ -155,7 +183,7 @@ class MakeRepository extends BaseRepository {
         } catch(err) {
             console.log(err);
             const response: IResponse = {
-                errors: ["Unknown error."],
+                errors: ["Failed to delete make."],
                 success: false
             };
             return response;

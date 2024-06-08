@@ -1,13 +1,11 @@
 "use client";
  
-import { useRouter } from "next/navigation";
+import RedirectButton from "../Buttons/RedirectButton/RedirectButton";
 
 const CreateVehicleButton = () => {
-    const router = useRouter();
-
     return ( 
         <div className="relative">
-            <button onClick={() => {router.push("/CreateVehicle")}}>Create Vehicle</button>
+            <RedirectButton text="Create Vehicle" path="/CreateVehicle" />
         </div>
     );
 };

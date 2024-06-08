@@ -1,25 +1,35 @@
 "use client";
 
-import VehicleCard from "@/Components/VehicleCard";
-import MakeModel from "@/Models/Entities/make";
-import MakeRepository from "@/Repository/MakeRepository";
 import RedirectButton from "@/Components/Buttons/RedirectButton/RedirectButton";
+import Search from "@/Components/Search";
+import DisplayCard from "@/Components/DisplayCard";
+import { useSearchParams } from "next/navigation";
+import SearchParamsModel from "@/Models/Entities/searchParams";
 
 const CreateVehicle = async () => {
-    let makeRepository: MakeRepository = new MakeRepository();
-    let makes = (await makeRepository.readMakes()).result as MakeModel[];
-    
+    const params = useSearchParams();
+    const queryParam = params.get("query") || "";
+    const pageParam = params.get("page") || 1;
+    let searchParamsModel = {
+        query: queryParam,
+        page: pageParam
+    } as SearchParamsModel;
     return (
-        <div>
-            <div>
-                <RedirectButton text="Create Make" path="/CreateMake" />
+        <div className="p-6">
+            <div className="w-full">
+                <div className="flex w-full items-center justify-between">
+                    <h1 className="text-2xl text-slate-700 font-mono">Vehicle Makes</h1>
+                </div>
+                <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
+                    <Search placeholder="Search makes..." />
+                    <RedirectButton text="Create Make" path="/CreateMake" />
+                </div>
+                <div className="p-6">
+                <DisplayCard searchParams={searchParamsModel} />
             </div>
-            <div className="h-full px-6 py-12 lg:flex lg:justify-center">
-            {makes.map((make: MakeModel) => (
-                <VehicleCard key={make.id as string} id={make.id as string} name={make.name} abrv={make.abrv} img={make.img} />
-            ))
-            }
-        </div>
+                <div className="mt-5 flex w-full justify-center">
+                </div>
+            </div>
         </div>
         
     );
